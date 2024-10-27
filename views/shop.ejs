@@ -1,0 +1,47 @@
+<%- include('./partials/header') %>
+<div class="flex items-start px-20 py-20">
+    <!-- Sidebar for Sorting and Filters -->
+    <aside class="w-1/4 pr-8 flex flex-col">
+        <div class="mb-8">
+            <h3 class="text-lg font-medium mb-2">Sort by</h3>
+            <form action="/shop" method="get">
+                <select class="border px-2 py-1" name="sortby">
+                    <option value="popular">Popular</option>
+                    <option value="newest">Newest</option>
+                </select>
+            </form>
+        </div>
+        <div class="mb-8">
+            <h4 class="font-medium mb-4">Categories</h4>
+            <a class="block mb-2" href="">New Collection</a>
+            <a class="block mb-2" href="">All Products</a>
+            <a class="block mb-2" href="">Discounted Products</a>
+        </div>
+        <div>
+            <h4 class="font-medium mb-4">Filter by</h4>
+            <a class="block mb-2" href="">Availability</a>
+            <a class="block mb-2" href="">Discount</a>
+        </div>
+    </aside>
+
+    <!-- Main Product Grid -->
+    <section class="w-3/4 grid grid-cols-4 gap-6">
+        <% product.forEach(function(product) { %>
+            <div class="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="w-full h-52 flex items-center justify-center bg-[<%= product.bgcolor %>]">
+                    <img class="h-32" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="<%= product.name %>">
+                </div>
+                <div class="flex justify-between items-center p-4 bg-[<%= product.panelcolor %>] text-[<%= product.textcolor %>]">
+                    <div>
+                        <h3 class="text-lg font-semibold"><%= product.name %></h3>
+                        <p class="text-sm">₹ <%= product.price %></p>
+                    </div>
+                    <button class="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md">
+                        <i class="ri-add-line"></i>
+                    </button>
+                </div>
+            </div>
+        <% }) %>
+    </section>
+</div>
+<%- include('./partials/footer') %>
