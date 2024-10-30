@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ownerModel = require("../models/owner-model");
 
+// Root route
 router.get("/", (req, res) => {
   res.send("hey it is working");
 });
@@ -30,7 +31,7 @@ if (process.env.MY_CUSTOM_ENV === "development") {
       });
 
       // Respond with the created owner
-      res.status(201).send(createdOwner); 
+      res.status(201).send(createdOwner);
     } catch (error) {
       // Handle any errors that occur during the operation
       console.error("Error creating owner:", error);
@@ -38,5 +39,14 @@ if (process.env.MY_CUSTOM_ENV === "development") {
     }
   });
 }
+
+// Admin route to render the create products page
+router.get("/admin", (req, res) => {
+  // Here you can pass data to the view if needed
+  const success = req.flash("success");
+  // const success = req.session.successMessage || ''; 
+  // req.session.successMessage = ''; // Clear message after using it
+  res.render("createproducts", { success } ); // Pass success variable to EJS
+});
 
 module.exports = router;
