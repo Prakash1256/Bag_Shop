@@ -6,6 +6,7 @@ const router = express.Router();
 // const isLoggedin = require("../middleware/isLoggedin"); 
 const isLoggedin = require("../middileware/isLoggedin");
 const productModel = require("../models/product-model");
+const userModel = require("../models/user-model");
 
 router.get("/", function(req, res) {
     let error = req.flash("error");
@@ -38,7 +39,28 @@ router.get("/shop", isLoggedin, async function(req, res) {
 // });
 
 
+router.get("/addtocart/:id" , isLoggedin , async function(req, res) {
+   let user = await  userModel.findOne({email:req.user.email});
+   user.cart.push(req.param.productid);
+   await user.save();
+   req.flash("success" , "Added to cart");
+   res.redirect("/shop");
+})
 
+router.get("/cart", isLoggedin, async function(req, res) {
+    try {
+        // Retrieve the user from the database
+        const user = await userModel.findOne({ email: req.user.email }).populate({ path: 'cart',
+            model: 'Product'});
+        
+        // Render the cart view and pass the user data
+        res.render("cart", { user });
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
+ 
 
 module.exports = router;
